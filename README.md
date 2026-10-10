@@ -232,3 +232,9 @@ docker compose logs --tail=100 api
 
 
 Admin ผ่าน Cloudflare Tunnel ใช้ ADMIN_ORIGINS=https://myapi.filmtanapon.com เพื่อรองรับ HTTPS ด้านหน้าและ HTTP ของ backend เพิ่มหลาย origin ด้วย comma แล้วรัน docker compose up -d เพื่อใช้ค่าใหม่
+
+Profile มี birthDate แบบ DATE เว้นว่างได้ แก้ใน Admin ด้วยปี ค.ศ. Frontend คำนวณอายุเต็มปีตามวันที่ใน Asia/Bangkok และแสดง AGE แทนเลเวล หากไม่มีวันเกิดจะแสดงขีด
+
+### ข้อมูล Profile สำหรับ Portfolio
+
+Profile เพิ่ม englishName, shortBio, currentRole, preferredRoles, languages, interests, websiteURL, contactEmail และ timezone นอกเหนือจากชื่อ headline biography วันเกิด รูป Resume และข้อมูลติดต่อเดิม ช่องใหม่เป็น optional และแก้ได้ใน Admin; preferredRoles/languages/interests เป็น string array ส่ง [] เพื่อล้างค่า Social Links และ Education ใช้ตารางความสัมพันธ์เดิม ไม่ต้องใส่ซ้ำใน biography ช่องใหม่รองรับใน API/seed แล้วแต่ frontend ยังแสดงเฉพาะ field ที่ใช้อยู่ ข้อมูล Profile ที่ส่งผ่าน GET เป็น public จึงใส่เฉพาะข้อมูลที่ต้องการแสดงใน Portfolio

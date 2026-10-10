@@ -11,7 +11,17 @@
       "email": "filmoko2345@gmail.com",
       "phone": "0981010725",
       "location": " Pathum Thani, Thailand",
-      "availabilityStatus": "OPEN_TO_WORK"
+      "availabilityStatus": "OPEN_TO_WORK",
+      "birthDate": "2006-03-31T00:00:00.000Z",
+      "englishName": null,
+      "shortBio": null,
+      "currentRole": null,
+      "websiteURL": null,
+      "contactEmail": null,
+      "timezone": null,
+      "preferredRoles": [],
+      "languages": [],
+      "interests": []
     }
   ],
   "socialLink": [

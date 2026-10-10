@@ -15,7 +15,7 @@ const relations = {
   eventTechStack: ['eventId', 'techstackId'], internProject: ['internId', 'projectId'],
   eventProject: ['eventId', 'projectId'],
 };
-const dateFields = ['startDate', 'endDate'];
+const dateFields = ['startDate', 'endDate', 'birthDate'];
 async function main() {
   await prisma.$transaction(async tx => {
     const ids = {};

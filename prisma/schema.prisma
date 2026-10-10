@@ -78,6 +78,16 @@ model Profile {
   lastName           String
   displayName        String
   headline           String?
+  birthDate          DateTime?          @db.Date
+  englishName String?
+  shortBio String?
+  currentRole String?
+  websiteURL String?
+  contactEmail String?
+  timezone String?
+  preferredRoles String[] @default([])
+  languages String[] @default([])
+  interests String[] @default([])
   biography          String?
   profileImageURL    String?
   coverImageURL      String?
