@@ -38,7 +38,7 @@ module.exports = function adminAuth(password) {
     if(requestPath.startsWith('/admin')) {
       res.set('Cache-Control','no-store');
       if(!authenticated(req)) {
-        if(req.method==='GET')return res.type('html').send(require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/admin-login.html'),'utf8'));
+        if(req.method==='GET')return res.type('html').send(require('node:fs').readFileSync(require('node:path').join(__dirname,'../../public/admin-login.html'),'utf8'));
         return res.status(401).json({message:'กรุณาเข้าสู่ระบบ Admin'});
       }
     }

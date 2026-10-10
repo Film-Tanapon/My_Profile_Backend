@@ -212,3 +212,20 @@ docker compose logs --tail=100 api
 - สีหรือข้อความเดิมกลับมา: ตรวจว่ามีการรัน seed หลังแก้ใน Admin หรือไม่
 
 เก็บ source, Prisma schema/migrations, seed, package-lock.json และไฟล์ Docker ใน Git ส่วน .env, node_modules และไฟล์ uploads ถูกเว้นใน .gitignore
+
+## โครงสร้างโค้ด backend
+
+- src/index.js: โหลด environment และเริ่ม/หยุดเซิร์ฟเวอร์
+- src/app.js: ประกอบ Express middleware และ routes
+- src/routes/: กำหนด URL และ resource configuration
+- src/controllers/: รับ request และจัด response
+- src/services/: CRUD และธุรกรรม/ความสัมพันธ์กับฐานข้อมูล
+- src/middleware/: Admin authentication, upload limits และ error handler
+- src/config/: Prisma client และ relation definitions
+- src/utils/: แปลงค่าจาก request
+
+เมื่อเพิ่ม resource ให้กำหนด fields/include ใน routes และใช้ CRUD factory เดิม ส่วน logic เฉพาะให้เพิ่ม service/controller ของ resource นั้น หน้า Admin อยู่ใน public/admin และ Prisma schema/seed อยู่ใน prisma
+
+### CORS
+
+อนุญาต https://myapi.filmtanapon.com และ localhost พอร์ต 5173/8080/3001 โดย default เพิ่ม origin ของ frontend ใน CORS_ORIGINS ของ .env คั่นด้วย comma แล้วรัน docker compose up -d ตัวอย่าง CORS_ORIGINS=https://portfolio.example.com โดย origin ต้องเป็น domain ของหน้าที่เรียก API ไม่ใช่แค่ domain ของ API การเขียนผ่าน Admin ยังตรวจ same-origin และ session ตามเดิม

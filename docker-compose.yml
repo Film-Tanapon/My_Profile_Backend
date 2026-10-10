@@ -24,6 +24,7 @@ services:
       PORT: 3001
       NODE_ENV: production
       UPLOAD_DIR: /app/storage/uploads
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
     ports:
       - "3001:3001"
