@@ -24,6 +24,7 @@ services:
       PORT: 3001
       NODE_ENV: production
       UPLOAD_DIR: /app/storage/uploads
+      ADMIN_ORIGINS: ${ADMIN_ORIGINS:-https://myapi.filmtanapon.com}
       CORS_ORIGINS: ${CORS_ORIGINS:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
     ports:

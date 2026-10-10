@@ -9,7 +9,10 @@ module.exports = function adminAuth(password) {
     if (!session || session.expires < Date.now()) { if(token)sessions.delete(token); return false; }
     return true;
   }
-  function sameOrigin(req) { return !req.headers.origin || req.headers.origin === req.protocol+'://'+req.get('host'); }
+  const adminOrigins = new Set(['https://myapi.filmtanapon.com', ...(process.env.ADMIN_ORIGINS || '').split(',').map(value=>value.trim()).filter(Boolean)]);
+  function sameOrigin(req) {
+    return !req.headers.origin || req.headers.origin === req.protocol+'://'+req.get('host') || adminOrigins.has(req.headers.origin);
+  }
   router.post('/admin/login', (req,res) => {
     res.set('Cache-Control','no-store');
     if(!password)return res.status(503).json({message:'ตั้งค่า ADMIN_PASSWORD ใน .env ก่อนใช้งาน'});

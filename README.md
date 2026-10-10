@@ -229,3 +229,6 @@ docker compose logs --tail=100 api
 ### CORS
 
 อนุญาต https://myapi.filmtanapon.com และ localhost พอร์ต 5173/8080/3001 โดย default เพิ่ม origin ของ frontend ใน CORS_ORIGINS ของ .env คั่นด้วย comma แล้วรัน docker compose up -d ตัวอย่าง CORS_ORIGINS=https://portfolio.example.com โดย origin ต้องเป็น domain ของหน้าที่เรียก API ไม่ใช่แค่ domain ของ API การเขียนผ่าน Admin ยังตรวจ same-origin และ session ตามเดิม
+
+
+Admin ผ่าน Cloudflare Tunnel ใช้ ADMIN_ORIGINS=https://myapi.filmtanapon.com เพื่อรองรับ HTTPS ด้านหน้าและ HTTP ของ backend เพิ่มหลาย origin ด้วย comma แล้วรัน docker compose up -d เพื่อใช้ค่าใหม่
