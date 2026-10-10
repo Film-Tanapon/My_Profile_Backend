@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Film Portfolio · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/styles.css" />
+  <link rel="stylesheet" href="/admin/uploads.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/admin"><span>F</span><b>FILM.</b></a>
+      <p class="nav-label">CONTENT</p>
+      <nav id="resource-nav"></nav><button class="ghost-button" id="logout-button">ออกจากระบบ</button>
+      <div class="sidebar-footer"><i id="api-dot"></i><span>Portfolio API</span><small id="api-status">กำลังตรวจสอบ...</small></div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div><span class="breadcrumb">PORTFOLIO / <b id="resource-breadcrumb">PROFILE</b></span><h1 id="page-title">จัดการ Profile</h1><p id="page-subtitle">ดูและแก้ไขข้อมูลในระบบ</p></div>
+        <button class="primary-button" id="create-button"><span>＋</span> เพิ่มข้อมูล</button>
+      </header>
+
+      <section class="summary-grid">
+        <article><span>รายการทั้งหมด</span><strong id="total-count">—</strong><small>records</small></article>
+        <article><span>Entity ที่ใช้งาน</span><strong>7</strong><small>collections</small></article>
+        <article class="tip-card"><span>QUICK TIP</span><p>เลือกเมนูด้านซ้ายเพื่อจัดการข้อมูลแต่ละประเภท</p></article>
+      </section>
+
+      <section class="data-panel">
+        <div class="panel-toolbar"><div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="ค้นหาข้อมูล..." /></div><button class="ghost-button" id="refresh-button">↻ รีเฟรช</button></div>
+        <div id="loading" class="state-message">กำลังโหลดข้อมูล...</div>
+        <div id="empty" class="state-message hidden"><span>◇</span><b>ยังไม่มีข้อมูล</b><p>กด “เพิ่มข้อมูล” เพื่อสร้างรายการแรก</p></div>
+        <div class="table-wrap hidden" id="table-wrap"><table><thead id="table-head"></thead><tbody id="table-body"></tbody></table></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="form-title">
+    <div class="drawer-head"><div><span id="form-mode">NEW RECORD</span><h2 id="form-title">เพิ่มข้อมูล</h2></div><button id="close-drawer" aria-label="ปิด">×</button></div>
+    <div class="editor-layout"><form id="record-form"><div id="form-fields" class="form-fields"></div><div class="form-actions"><button type="button" class="ghost-button" id="cancel-button">ยกเลิก</button><button type="submit" class="primary-button" id="save-button">บันทึกข้อมูล</button></div></form><article id="editor-preview" class="editor-preview"></article></div>
+  </aside>
+  <div class="toast hidden" id="toast"></div>
+  <script src="/admin/app.js" defer></script>
+</body>
+</html>

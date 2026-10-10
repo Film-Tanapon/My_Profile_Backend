@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tanapon
+      POSTGRES_PASSWORD: Film310349
+      POSTGRES_DB: portfolio_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - portfolio_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tanapon -d portfolio_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://tanapon:Film310349@db:5432/portfolio_db?schema=public
+      PORT: 3001
+      NODE_ENV: production
+      UPLOAD_DIR: /app/storage/uploads
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "npx prisma db push && node src/index.js"]
+    volumes:
+      - portfolio_uploads:/app/storage/uploads
+
+volumes:
+  portfolio_postgres_data:
+  portfolio_uploads:

@@ -1,0 +1,321 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TechCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  TOOL
+  LANGUAGE
+  OTHER
+}
+
+enum TechUsageType {
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  TOOL
+  GENERAL
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum EmploymentType {
+  INTERNSHIP
+  COOP
+  PART_TIME
+}
+
+enum WorkMode {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
+enum EventType {
+  HACKATHON
+  WORKSHOP
+  COMPETITION
+  CONFERENCE
+  MEETUP
+  OTHER
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  OPEN_TO_WORK
+  BUSY
+  UNAVAILABLE
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  VOCATIONAL
+  DIPLOMA
+  BACHELOR
+  MASTER
+  DOCTORATE
+  CERTIFICATE
+  OTHER
+}
+
+model Profile {
+  profileId          Int                @id @default(autoincrement()) @map("profile_id")
+  firstName          String
+  lastName           String
+  displayName        String
+  headline           String?
+  biography          String?
+  profileImageURL    String?
+  coverImageURL      String?
+  resumeURL          String?
+  email              String?
+  phone              String?
+  location           String?
+  availabilityStatus AvailabilityStatus @default(AVAILABLE)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  socialLinks SocialLink[]
+  educations  Education[]
+
+  @@map("profiles")
+}
+
+model SocialLink {
+  socialLinkId Int      @id @default(autoincrement()) @map("social_link_id")
+  profileId    Int      @map("profile_id")
+  platform     String
+  label        String?
+  url          String
+  icon         String?
+  displayOrder Int      @default(0)
+  isVisible    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [profileId], onDelete: Cascade)
+
+  @@unique([profileId, platform])
+  @@index([profileId, isVisible, displayOrder])
+  @@map("social_links")
+}
+
+model Education {
+  educationId        Int            @id @default(autoincrement()) @map("education_id")
+  profileId          Int            @map("profile_id")
+  institutionName    String
+  institutionLogoURL String?
+  educationLevel     EducationLevel @default(OTHER)
+  degree             String?
+  fieldOfStudy       String?
+  description        String?
+  grade              String?
+  location           String?
+  startDate          DateTime
+  endDate            DateTime?
+  isCurrent          Boolean        @default(false)
+  isPublished        Boolean        @default(true)
+  displayOrder       Int            @default(0)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [profileId], onDelete: Cascade)
+
+  @@index([profileId, isPublished, displayOrder])
+  @@index([startDate])
+  @@map("educations")
+}
+
+model TechStack {
+  techstackId Int          @id @default(autoincrement()) @map("techstack_id")
+  name        String       @unique
+  slug        String       @unique
+  category    TechCategory
+  iconURL     String?
+  color       String?
+  websiteURL  String?
+  proficiency Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  projects ProjectTechStack[]
+  interns  InternTechStack[]
+  events   EventTechStack[]
+
+  @@index([category])
+  @@map("tech_stacks")
+}
+
+model Project {
+  projectId        Int           @id @default(autoincrement()) @map("project_id")
+  title            String
+  slug             String        @unique
+  shortDescription String?
+  description      String?
+  role             String?
+  status           ProjectStatus @default(ACTIVE)
+  imageURL         String?
+  gallery          String[]      @default([])
+  webURL           String?
+  repositoryURL    String?
+  startDate        DateTime?     @map("start_date")
+  endDate          DateTime?     @map("end_date")
+  featured         Boolean       @default(false)
+  displayOrder     Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  techStacks  ProjectTechStack[]
+  internships InternProject[]
+  events      EventProject[]
+
+  @@index([status])
+  @@index([featured, displayOrder])
+  @@map("projects")
+  themeColor String? @db.VarChar(7)
+  dotColor String? @db.VarChar(7)
+  fontColor String? @db.VarChar(7)
+
+}
+
+model Intern {
+  internId         Int            @id @default(autoincrement()) @map("intern_id")
+  companyName      String
+  companyLogoURL   String?
+  gallery          String[]       @default([])
+  position         String
+  employmentType   EmploymentType @default(INTERNSHIP)
+  description      String?
+  responsibilities String[]       @default([])
+  achievements     String[]       @default([])
+  location         String?
+  workMode         WorkMode       @default(ONSITE)
+  companyURL       String?
+  startDate        DateTime
+  endDate          DateTime?
+  certificateURL   String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  techStacks InternTechStack[]
+  projects   InternProject[]
+
+  @@index([startDate])
+  @@map("internships")
+  themeColor String? @db.VarChar(7)
+  dotColor String? @db.VarChar(7)
+  fontColor String? @db.VarChar(7)
+
+}
+
+model Event {
+  eventId        Int       @id @default(autoincrement()) @map("event_id")
+  title          String
+  eventType      EventType @default(OTHER)
+  organizer      String?
+  description    String?
+  role           String?
+  location       String?
+  workMode       WorkMode?
+  imageURL       String?
+  gallery        String[]  @default([])
+  eventURL       String?
+  certificateURL String?
+  result         String?
+  startDate      DateTime  @map("event_date")
+  endDate        DateTime?
+  featured       Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  techStacks EventTechStack[]
+  projects   EventProject[]
+
+  @@index([eventType])
+  @@index([startDate])
+  @@map("events")
+  themeColor String? @db.VarChar(7)
+  dotColor String? @db.VarChar(7)
+  fontColor String? @db.VarChar(7)
+
+}
+
+model ProjectTechStack {
+  projectId    Int           @map("project_id")
+  techstackId  Int           @map("techstack_id")
+  usageType    TechUsageType @default(GENERAL)
+  displayOrder Int           @default(0)
+
+  project   Project   @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+  techStack TechStack @relation(fields: [techstackId], references: [techstackId], onDelete: Cascade)
+
+  @@id([projectId, techstackId])
+  @@index([techstackId])
+  @@map("project_tech_stacks")
+}
+
+model InternTechStack {
+  internId     Int           @map("intern_id")
+  techstackId  Int           @map("techstack_id")
+  usageType    TechUsageType @default(GENERAL)
+  displayOrder Int           @default(0)
+
+  intern    Intern    @relation(fields: [internId], references: [internId], onDelete: Cascade)
+  techStack TechStack @relation(fields: [techstackId], references: [techstackId], onDelete: Cascade)
+
+  @@id([internId, techstackId])
+  @@index([techstackId])
+  @@map("intern_tech_stacks")
+}
+
+model EventTechStack {
+  eventId      Int           @map("event_id")
+  techstackId  Int           @map("techstack_id")
+  usageType    TechUsageType @default(GENERAL)
+  displayOrder Int           @default(0)
+
+  event     Event     @relation(fields: [eventId], references: [eventId], onDelete: Cascade)
+  techStack TechStack @relation(fields: [techstackId], references: [techstackId], onDelete: Cascade)
+
+  @@id([eventId, techstackId])
+  @@index([techstackId])
+  @@map("event_tech_stacks")
+}
+
+model InternProject {
+  internId  Int @map("intern_id")
+  projectId Int @map("project_id")
+
+  intern  Intern  @relation(fields: [internId], references: [internId], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+
+  @@id([internId, projectId])
+  @@index([projectId])
+  @@map("intern_projects")
+}
+
+model EventProject {
+  eventId   Int @map("event_id")
+  projectId Int @map("project_id")
+
+  event   Event   @relation(fields: [eventId], references: [eventId], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
+
+  @@id([eventId, projectId])
+  @@index([projectId])
+  @@map("event_projects")
+}
